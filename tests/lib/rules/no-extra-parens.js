@@ -98,6 +98,7 @@ ruleTester.run("no-extra-parens", rule, {
         "(2 + 3) ** 4",
         "2 ** (2 + 3)",
         "new (import(source))",
+        "import((s,t))",
 
         // same precedence
         "a, b, c",
@@ -1106,6 +1107,29 @@ ruleTester.run("no-extra-parens", rule, {
             "(let)",
             "Identifier",
             1
+        ),
+
+        // import expressions
+        invalid(
+            "import((source))",
+            "import(source)",
+            "Identifier",
+            1,
+            { parserOptions: { ecmaVersion: 2020 } }
+        ),
+        invalid(
+            "import((source = 'foo.js'))",
+            "import(source = 'foo.js')",
+            "AssignmentExpression",
+            1,
+            { parserOptions: { ecmaVersion: 2020 } }
+        ),
+        invalid(
+            "import(((s,t)))",
+            "import((s,t))",
+            "SequenceExpression",
+            1,
+            { parserOptions: { ecmaVersion: 2020 } }
         )
     ]
 });
