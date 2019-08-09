@@ -21,6 +21,7 @@
     "include": [
         "lib/rules/utils/ast-utils.js",
         "lib/rules/accessor-pairs.js",
+        "lib/rules/array-bracket-newline.js",
         "lib/rules/block-scoped-var.js",
         "lib/rules/callback-return.js",
         "lib/rules/camelcase.js",
