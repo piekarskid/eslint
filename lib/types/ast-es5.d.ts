@@ -123,6 +123,7 @@ export interface ASTDefinition {
             type: "Literal"
             value: boolean
             regex: undefined
+            raw: string
         }
         CallExpression: {
             callee: Def.NodeRef<"Expression">
@@ -166,11 +167,13 @@ export interface ASTDefinition {
             type: "Literal"
             value: null
             regex: undefined
+            raw: string
         }
         NumberLiteral: {
             type: "Literal"
             value: number
             regex: undefined
+            raw: string
         }
         ObjectExpression: {
             properties: (
@@ -182,6 +185,7 @@ export interface ASTDefinition {
             type: "Literal"
             value: RegExp
             regex: { pattern: string; flags: string }
+            raw: string
         }
         SequenceExpression: {
             expressions: Def.NodeRef<"Expression">[]
@@ -190,6 +194,7 @@ export interface ASTDefinition {
             type: "Literal"
             value: string
             regex: undefined
+            raw: string
         }
         ThisExpression: {
         }
