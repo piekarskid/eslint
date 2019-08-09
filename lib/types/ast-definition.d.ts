@@ -84,7 +84,7 @@ type ResolveNodeRef<TMaybeNodeRef, TDef extends ASTDefinition> =
  * Resolve given `Def.NodeRef<T>` or `Def.NodeRef<T>[]` to the corresponded nodes.
  * If a given type was not `Def.NodeRef<T>`, it's as-is.
  * 
- * If you modify this logic, modify `ChildNodeType` type as same.
+ * If you modify this logic, modify `NodeRefType` type as same.
  */
 type NodeProperty<TValue, TDef extends ASTDefinition> =
     TValue extends (infer TElement)[]
@@ -111,18 +111,20 @@ type NodeBody<
 }
 
 /**
- * Collect all referenced node types (`Def.NodeRef<T>`) in a given node definition.
- *
+ * Get the `T` of `NodeRef<T>` or `NodeRef<T>[]`.
  * If you modify this logic, modify `NodeProperty` type as same.
  */
+type NodeRefType<TMaybeNodeRef> = Extract<
+    | TMaybeNodeRef extends { $ref: infer TType } ? TType : never
+    | TMaybeNodeRef extends { $ref: infer TType }[] ? TType : never,
+    Key
+>
+
+/**
+ * Collect all referenced node types (`Def.NodeRef<T>`) in a given node definition.
+ */
 type ChildNodeType<TNodeDef, TDef extends ASTDefinition> = ResolveNodeType<
-    {
-        [P in keyof TNodeDef]: Extract<
-            | TNodeDef[P] extends { $ref: infer TType } ? TType : never
-            | TNodeDef[P] extends { $ref: infer TType }[] ? TType : never,
-            Key
-        >
-    }[keyof TNodeDef],
+    { [P in keyof TNodeDef]: NodeRefType<TNodeDef[P]> }[keyof TNodeDef],
     TDef
 >
 
