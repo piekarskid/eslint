@@ -1,4 +1,4 @@
-import { Range, Token } from "./ast-common"
+import { Comment, Range, Token, LineColumn } from "./ast-common"
 import { ScopeManager } from "./scope"
 
 type Type<T extends string, AST> = Extract<AST, { type: T }>
@@ -28,6 +28,12 @@ export interface SourceCode<AST> {
     readonly visitorKeys: Record<string, string[]>
 
     getText(nodeOrToken?: HasRange): string
+    getLines(): readonly string[]
+    getAllComments(): readonly Comment[]
+    getNodeByRangeIndex(index: number): AST | null
+    isSpaceBetweenTokens(first: HasRange, second: HasRange): boolean
+    getLocFromIndex(index: number): LineColumn
+    getIndexFromLoc(loc: LineColumn): number
 
     /**
      * Gets the token starting at the specified index.
@@ -43,7 +49,8 @@ export interface SourceCode<AST> {
      * @param options - The option object.
      * @returns An object representing the token.
      */
-    getFirstToken(node: HasRange, options?: SkipOptions): Token | null
+    getFirstToken(node: HasRange, options: SkipOptions): Token | null
+    getFirstToken(node: HasRange): Token
 
     /**
      * Gets the last token of the given node.
@@ -51,7 +58,8 @@ export interface SourceCode<AST> {
      * @param options - The option object.
      * @returns An object representing the token.
      */
-    getLastToken(node: HasRange, options?: SkipOptions): Token | null
+    getLastToken(node: HasRange, options: SkipOptions): Token | null
+    getLastToken(node: HasRange): Token
 
     /**
      * Gets the token that precedes a given node or token.
@@ -202,19 +210,26 @@ export interface SourceCode<AST> {
      * @param nodeOrToken The AST node or token to check for adjacent comment tokens.
      * @returns An array of comments in occurrence order.
      */
-    getCommentsBefore(nodeOrToken: HasRange): Token[]
+    getCommentsBefore(nodeOrToken: HasRange): Comment[]
 
     /**
      * Gets all comment tokens directly after the given node or token.
      * @param nodeOrToken The AST node or token to check for adjacent comment tokens.
      * @returns An array of comments in occurrence order.
      */
-    getCommentsAfter(nodeOrToken: HasRange): Token[]
+    getCommentsAfter(nodeOrToken: HasRange): Comment[]
 
     /**
      * Gets all comment tokens inside the given node.
      * @param node The AST node to get the comments for.
      * @returns An array of comments in occurrence order.
      */
-    getCommentsInside(node: HasRange): Token[]
+    getCommentsInside(node: HasRange): Comment[]
+
+    /**
+     * @param node The AST node to get JSDoc comment.
+     * @returns The found JSDoc comment token.
+     * @deprecated
+     */
+    getJSDocComment(node: HasRange): Comment | null
 }
