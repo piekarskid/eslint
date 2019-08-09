@@ -19,6 +19,7 @@
         "target": "es2020"
     },
     "include": [
+        "lib/rules/utils/ast-utils.js",
         "lib/rules/accessor-pairs.js",
         "lib/rules/block-scoped-var.js",
         "lib/rules/callback-return.js",
@@ -27,7 +28,9 @@
         "lib/rules/constructor-super.js",
         "lib/rules/default-case.js",
         "lib/rules/eol-last.js",
+        "lib/shared/ast-utils.js",
         "lib/types/**/*.ts",
-        "tools/internal-rules/no-invalid-meta.js"
+        "tools/internal-rules/no-invalid-meta.js",
+        "types"
     ]
 }
